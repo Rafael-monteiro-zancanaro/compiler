@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Lexer",
+      "type": "lldb", // ou "cppdbg" se estiver usando GDB e ms-vscode.cpptools
+      "request": "launch",
+      "program": "${workspaceFolder}/compiler",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "preLaunchTask": "Build Lexer"
+    }
+  ]
+}

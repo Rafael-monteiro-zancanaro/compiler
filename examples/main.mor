@@ -1,0 +1,6 @@
+pub class Main {
+    pub static fn main(str[] args) -> nothing {
+        echo("Hello world", teste);
+        ret 1;
+    }
+}
