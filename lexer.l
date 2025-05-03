@@ -1,124 +1,119 @@
 %option noyywrap
 
-FILE *yyin;
-
-
 %{
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+
+    #define YY_DECL struct token_t* yylex(void)
+
+    FILE *yyin;
+
     enum Token {
-    /* TYPE DEFINITIONS */
-
+        /* TYPE DEFINITIONS */
         TK_INT,                  // int 
-
         TK_FLOAT,                // float
-        
         TK_STRING,               // str 
-
         TK_NOTHING,              // nothing
-
         TK_FUNCTION,             // fn
-
         TK_CLASS,                // class 
 
-    /* Reserved words */
-        
+        /* Reserved words */
         TK_IF,                   // if 
-        
         TK_FOR,                  // for 
-
         TK_PUB,                  // pub
-
         TK_PRIV,                 // priv
-
         TK_STATIC,               // static 
-
         TK_RETURN,               // ret
-
         TK_IMPORT,               // import               
-
         TK_FROM,                 // from               
 
-    /* Operators (?) */
-
+        /* Operators */
         TK_ATTRIBUTION,          // =
-
         TK_COMMA,                // ,
-        
         TK_RETURNTYPE,           // ->
-
         TK_OPEN_PARENTESIS,      // (
-
         TK_CLOSE_PARENTESIS,     // )
-
         TK_OPEN_BRACES,          // {
-
         TK_CLOSE_BRACES,         // }
-
         TK_COMMAND_END,          // ;
-        
         TK_OPEN_SQUARE_BRACKET,  // [ 
-
         TK_CLOSE_SQUARE_BRACKET, // ]
-
         TK_PLUS,                 // + 
-        
         TK_MINUS,                // - 
-
         TK_DIVISION,             // / 
-
         TK_DIVISION_ROUNDING_UP, // //
-
         TK_MULTIPLICATION,       // *
-
         TK_POW,                  // **
-
         TK_EQUALS,               // ==
-
         TK_DIFFERENT,            // !=
-    /* Other */
+
+        /* Other */
         TK_IDENTIFIER,
         TK_STRING_LITERAL,
         TK_NUMBER_LITERAL,
+        TK_FLOAT_NUMBER_LITERAL,
         TK_CLASSNAME,
         TK_INVALID,
         TK_EOF
     };
+
+    struct token_t {
+        enum Token token;
+        char *lexeme;
+    };
+
+    struct token_t* create_token(enum Token token_enum, const char* token_name) {
+        struct token_t* tok = malloc(sizeof(struct token_t));
+        tok->token = token_enum;
+        tok->lexeme = strdup(token_name);
+        return tok;
+    }
 %}
 
 %%
 
-"str"                       { printf("TK_STRING\n"); return TK_STRING; }
-"int"                       { printf("TK_INT\n"); return TK_INT; }
-"float"                     { printf("TK_FLOAT\n"); return TK_FLOAT; }
-"fn"                        { printf("TK_FUNCTION\n"); return TK_FUNCTION; }
-"nothing"                   { printf("TK_NOTHING\n"); return TK_NOTHING; }
-"if"                        { printf("TK_IF\n"); return TK_IF; }
-"for"                       { printf("TK_FOR\n"); return TK_FOR; }
-"priv"                      { printf("TK_PRIV\n"); return TK_PRIV; }
-"pub"                       { printf("TK_PUB\n"); return TK_PUB; }
-"static"                    { printf("TK_STATIC\n"); return TK_STATIC; }
-"class"                     { printf("TK_CLASS\n"); return TK_CLASS; }
-"import"                    { printf("TK_IMPORT\n"); return TK_IMPORT; }
-"from"                      { printf("TK_FROM\n"); return TK_FROM; }
-"ret"                       { printf("TK_RETURN\n"); return TK_RETURN; }
-"="                         { printf("TK_ATTRIBUTION\n"); return TK_ATTRIBUTION; }
-","                         { printf("TK_COMMA\n"); return TK_COMMA; }
-"("                         { printf("TK_OPEN_PARENTESIS\n"); return TK_OPEN_PARENTESIS; }
-")"                         { printf("TK_CLOSE_PARENTESIS\n"); return TK_CLOSE_PARENTESIS; }
-"->"                        { printf("TK_RETURNTYPE\n"); return TK_RETURNTYPE; }
-"{"                         { printf("TK_OPEN_BRACES\n"); return TK_OPEN_BRACES; }
-"}"                         { printf("TK_CLOSE_BRACES\n"); return TK_CLOSE_BRACES; }
-"["                         { printf("TK_OPEN_SQUARE_BRACKET\n"); return TK_OPEN_SQUARE_BRACKET; }
-"]"                         { printf("TK_CLOSE_SQUARE_BRACKET\n"); return TK_CLOSE_SQUARE_BRACKET; }
-";"                         { printf("TK_COMMAND_END\n"); return TK_COMMAND_END; }
-\"([^\\\"]|\\.)*\"          { printf("TK_STRING_LITERAL (%s)\n", yytext); return TK_STRING_LITERAL; }
-[0-9]+                      { printf("TK_NUMBER_LITERAL (%s)\n", yytext); return TK_NUMBER_LITERAL; }
-[A-Z_][a-zA-Z0-9_]*         { printf("TK_CLASSNAME (%s)\n", yytext); return TK_CLASSNAME; }
-[a-zA-Z_][a-zA-Z0-9_]*      { printf("TK_IDENTIFIER (%s)\n", yytext); return TK_IDENTIFIER; }
-[ \t\n\r]+                  { /* ignora espaços, tabs e quebras de linha */ }
-.                           { printf("TK_INVALID (%s)\n", yytext); return TK_INVALID; }
+"str"                       { return create_token(TK_STRING, "TK_STRING"); }
+"int"                       { return create_token(TK_INT, "TK_INT"); }
+"float"                     { return create_token(TK_FLOAT, "TK_FLOAT"); }
+"fn"                        { return create_token(TK_FUNCTION, "TK_FUNCTION"); }
+"nothing"                   { return create_token(TK_NOTHING, "TK_NOTHING"); }
+"if"                        { return create_token(TK_IF, "TK_IF"); }
+"for"                       { return create_token(TK_FOR, "TK_FOR"); }
+"priv"                      { return create_token(TK_PRIV, "TK_PRIV"); }
+"pub"                       { return create_token(TK_PUB, "TK_PUB"); }
+"static"                    { return create_token(TK_STATIC, "TK_STATIC"); }
+"class"                     { return create_token(TK_CLASS, "TK_CLASS"); }
+"import"                    { return create_token(TK_IMPORT, "TK_IMPORT"); }
+"from"                      { return create_token(TK_FROM, "TK_FROM"); }
+"ret"                       { return create_token(TK_RETURN, "TK_RETURN"); }
+"->"                        { return create_token(TK_RETURNTYPE, "TK_RETURNTYPE"); }
+"="                         { return create_token(TK_ATTRIBUTION, "TK_ATTRIBUTION"); }
+","                         { return create_token(TK_COMMA, "TK_COMMA"); }
+"("                         { return create_token(TK_OPEN_PARENTESIS, "TK_OPEN_PARENTESIS"); }
+")"                         { return create_token(TK_CLOSE_PARENTESIS, "TK_CLOSE_PARENTESIS"); }
+"{"                         { return create_token(TK_OPEN_BRACES, "TK_OPEN_BRACES"); }
+"}"                         { return create_token(TK_CLOSE_BRACES, "TK_CLOSE_BRACES"); }
+"["                         { return create_token(TK_OPEN_SQUARE_BRACKET, "TK_OPEN_SQUARE_BRACKET"); }
+"]"                         { return create_token(TK_CLOSE_SQUARE_BRACKET, "TK_CLOSE_SQUARE_BRACKET"); }
+";"                         { return create_token(TK_COMMAND_END, "TK_COMMAND_END"); }
+"//"                        { return create_token(TK_DIVISION_ROUNDING_UP, "TK_DIVISION_ROUNDING_UP"); }
+"/"                         { return create_token(TK_DIVISION, "TK_DIVISION"); }
+"**"                        { return create_token(TK_POW, "TK_POW"); }
+"*"                         { return create_token(TK_MULTIPLICATION, "TK_MULTIPLICATION"); }
+"=="                        { return create_token(TK_EQUALS, "TK_EQUALS"); }
+"!="                        { return create_token(TK_DIFFERENT, "TK_DIFFERENT"); }
+"+"                         { return create_token(TK_PLUS, "TK_PLUS"); }
+"-"                         { return create_token(TK_MINUS, "TK_MINUS"); }
+\"([^\\\"]|\\.)*\"          { return create_token(TK_STRING_LITERAL, "TK_STRING_LITERAL"); }
+[0-9]+\.[0-9]+              { return create_token(TK_FLOAT_NUMBER_LITERAL, "TK_FLOAT_NUMBER_LITERAL"); }
+[0-9]+                      { return create_token(TK_NUMBER_LITERAL, "TK_NUMBER_LITERAL"); }
+[A-Z_][a-zA-Z0-9_]*         { return create_token(TK_CLASSNAME, "TK_CLASSNAME"); }
+[a-zA-Z_][a-zA-Z0-9_]*      { return create_token(TK_IDENTIFIER, "TK_IDENTIFIER"); }
+[ \t\n\r]+                  { /* ignora espaços em branco */ }
+.                           { return create_token(TK_INVALID, "TK_INVALID"); }
+
 %%
-
-
 
 int main(int argc, char **argv) {
     if (argc != 2) {
@@ -132,9 +127,12 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    int token;
-
-    while ((token = yylex()) != 0); // TODO: Implementar lógica para os tokens dentro deste while
+    struct token_t* token;
+    while ((token = yylex()) != NULL) {
+        printf("TOKEN: %-25s | LEXEMA: %s\n", token->lexeme, yytext);
+        free(token->lexeme);
+        free(token);
+    }
 
     fclose(yyin);
     return 0;

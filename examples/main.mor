@@ -1,5 +1,6 @@
 pub class Main {
     pub static fn main(str[] args) -> nothing {
+        float teste = 2.5;
         echo("Hello world", teste);
         ret 1;
     }
