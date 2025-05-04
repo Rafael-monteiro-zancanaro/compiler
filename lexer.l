@@ -1,148 +1,208 @@
 %option noyywrap
 
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
 
-enum Token {
-    /* TYPE DEFINITIONS */
-    TK_INT,                  // int 
-    TK_FLOAT,                // float
-    TK_STRING,               // str 
-    TK_NOTHING,              // nothing
-    TK_FUNCTION,             // fn
-    TK_CLASS,                // class 
+    #define YY_DECL struct token_t* yylex(void) //Declara que o retorno do yylex vai ser um token_t * e não mais uma string com o lexema
 
-    /* Reserved words */
-    TK_IF,                   // if 
-    TK_FOR,                  // for 
-    TK_PUB,                  // pub
-    TK_PRIV,                 // priv
-    TK_STATIC,               // static 
-    TK_RETURN,               // ret
-    TK_IMPORT,               // import               
-    TK_FROM,                 // from               
+    FILE *yyin;
 
-    /* Operators */
-    TK_ATTRIBUTION,          // =
-    TK_COMMA,                // ,
-    TK_RETURNTYPE,           // ->
-    TK_OPEN_PARENTESIS,      // (
-    TK_CLOSE_PARENTESIS,     // )
-    TK_OPEN_BRACES,          // {
-    TK_CLOSE_BRACES,         // }
-    TK_COMMAND_END,          // ;
-    TK_OPEN_SQUARE_BRACKET,  // [ 
-    TK_CLOSE_SQUARE_BRACKET, // ]
-    TK_PLUS,                 // + 
-    TK_MINUS,                // - 
-    TK_DIVISION,             // / 
-    TK_DIVISION_ROUNDING_UP, // //
-    TK_MULTIPLICATION,       // *
-    TK_POW,                  // **
-    TK_EQUALS,               // ==
-    TK_DIFFERENT,            // !=
+    enum Token {
+        /* TYPE DEFINITIONS */
+        TK_INT,                  // int 
+        TK_FLOAT,                // float
+        TK_STRING,               // str 
+        TK_NOTHING,              // nothing
+        TK_FUNCTION,             // fn
+        TK_CLASS,                // class 
 
-    /* Other */
-    TK_IDENTIFIER,
-    TK_STRING_LITERAL,
-    TK_NUMBER_LITERAL,
-    TK_FLOAT_NUMBER_LITERAL,
-    TK_CLASSNAME,
-    TK_INVALID,
-    TK_EOF
-};
+        /* Reserved words */
+        TK_IF,                   // if 
+        TK_FOR,                  // for 
+        TK_PUB,                  // pub
+        TK_PRIV,                 // priv
+        TK_STATIC,               // static 
+        TK_RETURN,               // ret
+        TK_IMPORT,               // import               
+        TK_FROM,                 // from               
 
-struct token_t {
-    enum Token token;
-    char *lexeme;
-};
+        /* Operators */
+        TK_ATTRIBUTION,          // =
+        TK_COMMA,                // ,
+        TK_RETURNTYPE,           // ->
+        TK_OPEN_PARENTESIS,      // (
+        TK_CLOSE_PARENTESIS,     // )
+        TK_OPEN_BRACES,          // {
+        TK_CLOSE_BRACES,         // }
+        TK_COMMAND_END,          // ;
+        TK_OPEN_SQUARE_BRACKET,  // [ 
+        TK_CLOSE_SQUARE_BRACKET, // ]
+        TK_PLUS,                 // + 
+        TK_MINUS,                // - 
+        TK_DIVISION,             // / 
+        TK_DIVISION_ROUNDING_UP, // //
+        TK_MULTIPLICATION,       // *
+        TK_POW,                  // **
+        TK_EQUALS,               // ==
+        TK_DIFFERENT,            // !=
 
-FILE *yyin;
+        /* Other */
+        TK_IDENTIFIER,
+        TK_STRING_LITERAL,
+        TK_FLOAT_NUMBER_LITERAL,
+        TK_NUMBER_LITERAL,
+        TK_CLASSNAME,
+        TK_INVALID,
+        TK_EOF
+    };
 
-struct token_t* create_token(enum Token token_type, const char* token_name) {
-    struct token_t* t = malloc(sizeof(struct token_t));
-    if (!t) {
-        fprintf(stderr, "Erro de alocação de memória para token\n");
-        exit(1);
+    struct token_t {
+        enum Token token;
+        char *lexeme;
+    };
+
+    struct token_t *create_token(enum Token token_enum, const char* token_name) {
+        struct token_t* tok = malloc(sizeof(struct token_t));
+        tok->token = token_enum;
+        tok->lexeme = strdup(yytext);
+        return tok;
     }
-
-    t->token = token_type;
-    t->lexeme = strdup(yytext);
-
-    printf("TOKEN: %-25s | LEXEMA: %s\n", token_name, yytext);
-    return t;
-}
 %}
 
 %%
-
-"str"                       { return create_token(TK_STRING, "TK_STRING"); }
-"int"                       { return create_token(TK_INT, "TK_INT"); }
-"float"                     { return create_token(TK_FLOAT, "TK_FLOAT"); }
-"fn"                        { return create_token(TK_FUNCTION, "TK_FUNCTION"); }
-"nothing"                   { return create_token(TK_NOTHING, "TK_NOTHING"); }
-"if"                        { return create_token(TK_IF, "TK_IF"); }
-"for"                       { return create_token(TK_FOR, "TK_FOR"); }
-"priv"                      { return create_token(TK_PRIV, "TK_PRIV"); }
-"pub"                       { return create_token(TK_PUB, "TK_PUB"); }
-"static"                    { return create_token(TK_STATIC, "TK_STATIC"); }
-"class"                     { return create_token(TK_CLASS, "TK_CLASS"); }
-"import"                    { return create_token(TK_IMPORT, "TK_IMPORT"); }
-"from"                      { return create_token(TK_FROM, "TK_FROM"); }
-"ret"                       { return create_token(TK_RETURN, "TK_RETURN"); }
-
-"=="                        { return create_token(TK_EQUALS, "TK_EQUALS"); }
-"!="                        { return create_token(TK_DIFFERENT, "TK_DIFFERENT"); }
-"//"                        { return create_token(TK_DIVISION_ROUNDING_UP, "TK_DIVISION_ROUNDING_UP"); }
-"**"                        { return create_token(TK_POW, "TK_POW"); }
-"->"                        { return create_token(TK_RETURNTYPE, "TK_RETURNTYPE"); }
-
-"="                         { return create_token(TK_ATTRIBUTION, "TK_ATTRIBUTION"); }
-","                         { return create_token(TK_COMMA, "TK_COMMA"); }
-"("                         { return create_token(TK_OPEN_PARENTESIS, "TK_OPEN_PARENTESIS"); }
-")"                         { return create_token(TK_CLOSE_PARENTESIS, "TK_CLOSE_PARENTESIS"); }
-"{"                         { return create_token(TK_OPEN_BRACES, "TK_OPEN_BRACES"); }
-"}"                         { return create_token(TK_CLOSE_BRACES, "TK_CLOSE_BRACES"); }
-"["                         { return create_token(TK_OPEN_SQUARE_BRACKET, "TK_OPEN_SQUARE_BRACKET"); }
-"]"                         { return create_token(TK_CLOSE_SQUARE_BRACKET, "TK_CLOSE_SQUARE_BRACKET"); }
-";"                         { return create_token(TK_COMMAND_END, "TK_COMMAND_END"); }
-"+"                         { return create_token(TK_PLUS, "TK_PLUS"); }
-"-"                         { return create_token(TK_MINUS, "TK_MINUS"); }
-"/"                         { return create_token(TK_DIVISION, "TK_DIVISION"); }
-"*"                         { return create_token(TK_MULTIPLICATION, "TK_MULTIPLICATION"); }
-
-\"([^\\\"]|\\.)*\"          { return create_token(TK_STRING_LITERAL, "TK_STRING_LITERAL"); }
-
-[0-9]+\.[0-9]+              { return create_token(TK_FLOAT_NUMBER_LITERAL, "TK_FLOAT_NUMBER_LITERAL"); }
-[0-9]+                      { return create_token(TK_NUMBER_LITERAL, "TK_NUMBER_LITERAL"); }
-
-[A-Z_][a-zA-Z0-9_]*         { return create_token(TK_CLASSNAME, "TK_CLASSNAME"); }
-
-[a-zA-Z_][a-zA-Z0-9_]*      { return create_token(TK_IDENTIFIER, "TK_IDENTIFIER"); }
-
-[0-9]+[a-zA-Z_][a-zA-Z0-9_]* { return create_token(TK_INVALID, "TK_INVALID"); }
-
-[ \t\n\r]+                  { /* ignora espaços em branco */ }
-
-.                           { return create_token(TK_INVALID, "TK_INVALID"); }
+[+-]?[0-9][0-9.]*[a-zA-Z_][a-zA-Z0-9_]*   { return create_token(TK_INVALID, "TK_INVALID"); }
+"str"                                { return create_token(TK_STRING, "TK_STRING"); }
+"int"                                { return create_token(TK_INT, "TK_INT"); }
+"float"                              { return create_token(TK_FLOAT, "TK_FLOAT"); }
+"fn"                                 { return create_token(TK_FUNCTION, "TK_FUNCTION"); }
+"nothing"                            { return create_token(TK_NOTHING, "TK_NOTHING"); }
+"if"                        		 { return create_token(TK_IF, "TK_IF"); }
+"for"                       		 { return create_token(TK_FOR, "TK_FOR"); }
+"priv"                      		 { return create_token(TK_PRIV, "TK_PRIV"); }
+"pub"                       		 { return create_token(TK_PUB, "TK_PUB"); }
+"static"                    		 { return create_token(TK_STATIC, "TK_STATIC"); }
+"class"                     		 { return create_token(TK_CLASS, "TK_CLASS"); }
+"import"                    		 { return create_token(TK_IMPORT, "TK_IMPORT"); }
+"from"                      		 { return create_token(TK_FROM, "TK_FROM"); }
+"ret"                       		 { return create_token(TK_RETURN, "TK_RETURN"); }
+"->"                        		 { return create_token(TK_RETURNTYPE, "TK_RETURNTYPE"); }
+"="                         		 { return create_token(TK_ATTRIBUTION, "TK_ATTRIBUTION"); }
+","                         		 { return create_token(TK_COMMA, "TK_COMMA"); }
+"("                         		 { return create_token(TK_OPEN_PARENTESIS, "TK_OPEN_PARENTESIS"); }
+")"                         		 { return create_token(TK_CLOSE_PARENTESIS, "TK_CLOSE_PARENTESIS"); }
+"{"                                  { return create_token(TK_OPEN_BRACES, "TK_OPEN_BRACES"); }
+"}"                         		 { return create_token(TK_CLOSE_BRACES, "TK_CLOSE_BRACES"); }
+"["                         		 { return create_token(TK_OPEN_SQUARE_BRACKET, "TK_OPEN_SQUARE_BRACKET"); }
+"]"                         		 { return create_token(TK_CLOSE_SQUARE_BRACKET, "TK_CLOSE_SQUARE_BRACKET"); }
+";"                         		 { return create_token(TK_COMMAND_END, "TK_COMMAND_END"); }
+"//"                        		 { return create_token(TK_DIVISION_ROUNDING_UP, "TK_DIVISION_ROUNDING_UP"); }
+"/"                         		 { return create_token(TK_DIVISION, "TK_DIVISION"); }
+"**"                        		 { return create_token(TK_POW, "TK_POW"); }
+"*"                         		 { return create_token(TK_MULTIPLICATION, "TK_MULTIPLICATION"); }
+"=="                        		 { return create_token(TK_EQUALS, "TK_EQUALS"); }
+"!="                        		 { return create_token(TK_DIFFERENT, "TK_DIFFERENT"); }
+"+"                         		 { return create_token(TK_PLUS, "TK_PLUS"); }
+"-"                         		 { return create_token(TK_MINUS, "TK_MINUS"); }
+\"([^\\\"]|\\.)*\"          		 { return create_token(TK_STRING_LITERAL, "TK_STRING_LITERAL"); }
+[0-9]+\.[0-9]+              		 { return create_token(TK_FLOAT_NUMBER_LITERAL, "TK_FLOAT_NUMBER_LITERAL"); }
+[0-9]+                      		 { return create_token(TK_NUMBER_LITERAL, "TK_NUMBER_LITERAL"); }
+[A-Z_][a-zA-Z0-9_]*         		 { return create_token(TK_CLASSNAME, "TK_CLASSNAME"); }
+[a-zA-Z_][a-zA-Z0-9_]*      		 { return create_token(TK_IDENTIFIER, "TK_IDENTIFIER"); }
+[ \t\n\r]+                  		 { /* ignora espaços em branco */ }
+.                           		 { return create_token(TK_INVALID, "TK_INVALID"); }
 
 %%
 
+#define MAX_LINE_LENGTH 1024
+
+void print_line_with_highlight(const char* filename, const char* word) {
+    size_t line = 1;
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        perror("Error opening trace file");
+        return;
+    }
+
+    char buffer[MAX_LINE_LENGTH];
+    while (fgets(buffer, MAX_LINE_LENGTH, file)) {
+        char* match = strstr(buffer, word);
+        if (match) {
+
+            const char* RED = "\033[31m";
+            const char* YELLOW_BOLD = "\033[1;33m";
+            const char* RESET = "\033[0m";
+
+            size_t error_column = match - buffer;
+
+            printf("%s [%ld:%ld] Invalid token: '%s'\n\n", RED, line, error_column + 1, word);
+            fwrite(buffer, 1, error_column, stdout);                
+            printf("%s%s%s", YELLOW_BOLD, word, RED);                 
+            printf("%s\n", match + strlen(word));                       
+            printf("Compilation aborted with lexical analysis error (Opcode 1)\n");
+            printf("%s", RESET);
+            break;
+        }
+        line++;
+    }
+
+    fclose(file);
+}
+
+int ends_with(const char *str, const char *suffix) {
+    if (!str || !suffix) {
+        return 0;
+    }
+    size_t str_len = strlen(str);
+    size_t suffix_len = strlen(suffix);
+
+    if (suffix_len > str_len) {
+        return 0;
+    }
+
+    return (strcmp(str + str_len - suffix_len, suffix) == 0);
+}
+
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        fprintf(stderr, "Uso: %s <arquivo.mor>\n", argv[0]);
-        return 1;
+
+    int debugMode = 0;
+
+    const char FILE_EXT[5]=".mor";
+
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <file.mor> [OPTIONS...]\n", argv[0]);
+        fprintf(stderr, "--d: Debug mode\n");
+        exit(1);
+    }
+
+    if (argc > 2) {
+        debugMode = strncmp(argv[2], "--d", 3) == 0;
+    } 
+
+    if (!ends_with(argv[1], FILE_EXT)) {
+        fprintf(stderr, "Invalid file name: '%s'\n", argv[1]);
+        exit(1);
     }
 
     yyin = fopen(argv[1], "r");
+
     if (!yyin) {
         perror("Erro ao abrir o arquivo");
         return 1;
     }
 
-    while (yylex());
+    struct token_t* token;
+    while ((token = yylex()) != NULL) {
+        if (token->token == TK_INVALID) {
+            print_line_with_highlight(argv[1], token->lexeme);
+            exit(1);
+        }
+        if (debugMode) printf("TOKEN: %-25d | LEXEMA: %s\n", token->token, token->lexeme);
+
+        free(token->lexeme);
+        free(token);
+    }
 
     fclose(yyin);
     return 0;
