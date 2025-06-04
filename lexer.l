@@ -12,6 +12,7 @@
     enum Token {
         /* TYPE DEFINITIONS */
         TK_INT,                  // int 
+        TK_BOOL,                 // bool
         TK_FLOAT,                // float
         TK_STRING,               // str 
         TK_NOTHING,              // nothing
@@ -49,7 +50,7 @@
         TK_POW,                  // **
         TK_EQUALS,               // ==
         TK_DIFFERENT,            // !=
-        TK_MOD,                  // % //criar daq p baixo
+        TK_MOD,                  // % 
         TK_NOT,                  // !
         TK_LOGICAL_AND,          // &&
         TK_LOGICAL_OR,           // ||
@@ -62,15 +63,14 @@
         TK_COLON,                // :
         TK_PRINTF,               // printf
         TK_SCANF,                // scanf
-        TK_EXIT,                 // EXIT //cabo aq
-
-
+        TK_EXIT,                 // exit 
         /* Other */
         TK_IDENTIFIER,
         TK_STRING_LITERAL,
         TK_FLOAT_NUMBER_LITERAL,
         TK_NUMBER_LITERAL,
         TK_CLASSNAME,
+        TK_COMMENT,             // #
         TK_INVALID,
         TK_EOF
     };
@@ -94,7 +94,12 @@
 "int"                                { return create_token(TK_INT, "TK_INT"); }
 "float"                              { return create_token(TK_FLOAT, "TK_FLOAT"); }
 "fn"                                 { return create_token(TK_FUNCTION, "TK_FUNCTION"); }
+"bool"                               { return create_token(TK_BOOL, "TK_BOOL"); }
 "nothing"                            { return create_token(TK_NOTHING, "TK_NOTHING"); }
+"printf"                             { return create_token(TK_PRINTF, "TK_PRINTF"); }
+"scanf"                              { return create_token(TK_SCANF, "TK_SCANF"); }
+"exit"                               { return create_token(TK_EXIT, "TK_EXIT"); }
+"not"                                { return create_token(TK_NOT, "TK_NOT"); }
 "if"                        		 { return create_token(TK_IF, "TK_IF"); }
 "for"                       		 { return create_token(TK_FOR, "TK_FOR"); }
 "priv"                      		 { return create_token(TK_PRIV, "TK_PRIV"); }
@@ -105,7 +110,6 @@
 "from"                      		 { return create_token(TK_FROM, "TK_FROM"); }
 "ret"                       		 { return create_token(TK_RETURN, "TK_RETURN"); }
 "->"                        		 { return create_token(TK_RETURNTYPE, "TK_RETURNTYPE"); }
-"="                         		 { return create_token(TK_ATTRIBUTION, "TK_ATTRIBUTION"); }
 ","                         		 { return create_token(TK_COMMA, "TK_COMMA"); }
 "("                         		 { return create_token(TK_OPEN_PARENTESIS, "TK_OPEN_PARENTESIS"); }
 ")"                         		 { return create_token(TK_CLOSE_PARENTESIS, "TK_CLOSE_PARENTESIS"); }
@@ -120,8 +124,19 @@
 "*"                         		 { return create_token(TK_MULTIPLICATION, "TK_MULTIPLICATION"); }
 "=="                        		 { return create_token(TK_EQUALS, "TK_EQUALS"); }
 "!="                        		 { return create_token(TK_DIFFERENT, "TK_DIFFERENT"); }
+"+="                        		 { return create_token(TK_ADD_ASSIGN, "TK_ADD_ASSIGN"); }
+"-="                        		 { return create_token(TK_MINUS_ASSIGN, "TK_MINUS_ASSIGN"); }
+"&&"                         		 { return create_token(TK_LOGICAL_AND, "TK_LOGICAL_AND"); }
+"||"                         		 { return create_token(TK_LOGICAL_OR, "TK_LOGICAL_OR"); }
 "+"                         		 { return create_token(TK_PLUS, "TK_PLUS"); }
 "-"                         		 { return create_token(TK_MINUS, "TK_MINUS"); }
+"<="                         		 { return create_token(TK_LESS_EQUAL, "TK_LESS_EQUAL"); }
+">="                         		 { return create_token(TK_GREATER_EQUAL, "TK_GREATER_EQUAL"); }
+"<"                         		 { return create_token(TK_LESS_THAN, "TK_LESS_THAN"); }
+">"                         		 { return create_token(TK_GREATER_THAN, "TK_GREATER_THAN"); }
+":"                         		 { return create_token(TK_COLON, "TK_COLON"); }
+"="                         		 { return create_token(TK_ATTRIBUTION, "TK_ATTRIBUTION"); }
+"#"                         		 { return create_token(TK_COMMENT, "TK_COMMENT"); }
 \"([^\\\"]|\\.)*\"          		 { return create_token(TK_STRING_LITERAL, "TK_STRING_LITERAL"); }
 [0-9]+\.[0-9]+              		 { return create_token(TK_FLOAT_NUMBER_LITERAL, "TK_FLOAT_NUMBER_LITERAL"); }
 [0-9]+                      		 { return create_token(TK_NUMBER_LITERAL, "TK_NUMBER_LITERAL"); }

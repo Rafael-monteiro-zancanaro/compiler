@@ -1,8 +1,18 @@
 pub class Main {
     pub static fn main(str[] args) -> nothing {
-        -6teste = 2;
+        teste = 2;
+        teste += 1;
+        teste -= 1;
         float teste = 2.5;
-        echo("Hello world", teste);
+        float division_by_integer = 10 // 5;
+        bool is_minus = 2 < 3;
+        bool is_bigger = 3 > 2;
+        bool maybe_equal = 4 <= 4;
+        bool should_be_equal = 5 >= 5
+        bool uai = should_be_equal || maybe_equal;
+        bool always_true = is_minus && is_bigger;
+        printf("Hello world", teste);
+        scanf() # TODO: Implement
         ret 1;
     }
 }
