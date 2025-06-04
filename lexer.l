@@ -26,7 +26,9 @@
         TK_STATIC,               // static 
         TK_RETURN,               // ret
         TK_IMPORT,               // import               
-        TK_FROM,                 // from               
+        TK_FROM,                 // from   //criar
+        TK_BREAK,                // break //criar
+        TK_ELSE,                 // else  //criar   
 
         /* Operators */
         TK_ATTRIBUTION,          // =
@@ -42,11 +44,26 @@
         TK_PLUS,                 // + 
         TK_MINUS,                // - 
         TK_DIVISION,             // / 
-        TK_DIVISION_ROUNDING_UP, // //
+        TK_DIVISION_FLOOR,       // //
         TK_MULTIPLICATION,       // *
         TK_POW,                  // **
         TK_EQUALS,               // ==
         TK_DIFFERENT,            // !=
+        TK_MOD,                  // % //criar daq p baixo
+        TK_NOT,                  // !
+        TK_LOGICAL_AND,          // &&
+        TK_LOGICAL_OR,           // ||
+        TK_LESS_THAN,            // <
+        TK_GREATER_THAN,         // >
+        TK_GREATER_EQUAL,        // >=
+        TK_LESS_EQUAL,           // <=
+        TK_ADD_ASSIGN,           // +=
+        TK_MINUS_ASSIGN,         // -=
+        TK_COLON,                // :
+        TK_PRINTF,               // printf
+        TK_SCANF,                // scanf
+        TK_EXIT,                 // EXIT //cabo aq
+
 
         /* Other */
         TK_IDENTIFIER,
@@ -97,7 +114,7 @@
 "["                         		 { return create_token(TK_OPEN_SQUARE_BRACKET, "TK_OPEN_SQUARE_BRACKET"); }
 "]"                         		 { return create_token(TK_CLOSE_SQUARE_BRACKET, "TK_CLOSE_SQUARE_BRACKET"); }
 ";"                         		 { return create_token(TK_COMMAND_END, "TK_COMMAND_END"); }
-"//"                        		 { return create_token(TK_DIVISION_ROUNDING_UP, "TK_DIVISION_ROUNDING_UP"); }
+"//"                        		 { return create_token(TK_DIVISION_FLOOR, "TK_DIVISION_FLOOR"); }
 "/"                         		 { return create_token(TK_DIVISION, "TK_DIVISION"); }
 "**"                        		 { return create_token(TK_POW, "TK_POW"); }
 "*"                         		 { return create_token(TK_MULTIPLICATION, "TK_MULTIPLICATION"); }
