@@ -61,6 +61,7 @@
         TK_ADD_ASSIGN,           // +=
         TK_MINUS_ASSIGN,         // -=
         TK_COLON,                // :
+        TK_DOT,                  // .
         TK_PRINTF,               // printf
         TK_SCANF,                // scanf
         TK_EXIT,                 // exit 
@@ -110,14 +111,12 @@
 "from"                      		 { return create_token(TK_FROM, "TK_FROM"); }
 "ret"                       		 { return create_token(TK_RETURN, "TK_RETURN"); }
 "->"                        		 { return create_token(TK_RETURNTYPE, "TK_RETURNTYPE"); }
-","                         		 { return create_token(TK_COMMA, "TK_COMMA"); }
 "("                         		 { return create_token(TK_OPEN_PARENTESIS, "TK_OPEN_PARENTESIS"); }
 ")"                         		 { return create_token(TK_CLOSE_PARENTESIS, "TK_CLOSE_PARENTESIS"); }
 "{"                                  { return create_token(TK_OPEN_BRACES, "TK_OPEN_BRACES"); }
 "}"                         		 { return create_token(TK_CLOSE_BRACES, "TK_CLOSE_BRACES"); }
 "["                         		 { return create_token(TK_OPEN_SQUARE_BRACKET, "TK_OPEN_SQUARE_BRACKET"); }
 "]"                         		 { return create_token(TK_CLOSE_SQUARE_BRACKET, "TK_CLOSE_SQUARE_BRACKET"); }
-";"                         		 { return create_token(TK_COMMAND_END, "TK_COMMAND_END"); }
 "//"                        		 { return create_token(TK_DIVISION_FLOOR, "TK_DIVISION_FLOOR"); }
 "/"                         		 { return create_token(TK_DIVISION, "TK_DIVISION"); }
 "**"                        		 { return create_token(TK_POW, "TK_POW"); }
@@ -130,6 +129,7 @@
 "||"                         		 { return create_token(TK_LOGICAL_OR, "TK_LOGICAL_OR"); }
 "+"                         		 { return create_token(TK_PLUS, "TK_PLUS"); }
 "-"                         		 { return create_token(TK_MINUS, "TK_MINUS"); }
+";"                         		 { return create_token(TK_COMMAND_END, "TK_COMMAND_END"); }
 "<="                         		 { return create_token(TK_LESS_EQUAL, "TK_LESS_EQUAL"); }
 ">="                         		 { return create_token(TK_GREATER_EQUAL, "TK_GREATER_EQUAL"); }
 "<"                         		 { return create_token(TK_LESS_THAN, "TK_LESS_THAN"); }
@@ -137,6 +137,8 @@
 ":"                         		 { return create_token(TK_COLON, "TK_COLON"); }
 "="                         		 { return create_token(TK_ATTRIBUTION, "TK_ATTRIBUTION"); }
 "#"                         		 { return create_token(TK_COMMENT, "TK_COMMENT"); }
+"."                         		 { return create_token(TK_DOT, "TK_DOT"); }
+","                         		 { return create_token(TK_COMMA, "TK_COMMA"); }
 \"([^\\\"]|\\.)*\"          		 { return create_token(TK_STRING_LITERAL, "TK_STRING_LITERAL"); }
 [0-9]+\.[0-9]+              		 { return create_token(TK_FLOAT_NUMBER_LITERAL, "TK_FLOAT_NUMBER_LITERAL"); }
 [0-9]+                      		 { return create_token(TK_NUMBER_LITERAL, "TK_NUMBER_LITERAL"); }
