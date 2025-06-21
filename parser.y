@@ -15,9 +15,6 @@
 /* Reserved words */
 %token TK_IF                /* if */
 %token TK_FOR               /* for */
-%token TK_PUB               /* pub */
-%token TK_PRIV              /* priv */
-%token TK_STATIC            /* static */
 %token TK_RETURN            /* ret */
 %token TK_IMPORT            /* import */
 %token TK_FROM              /* from */
