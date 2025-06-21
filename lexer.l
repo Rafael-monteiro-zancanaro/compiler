@@ -22,14 +22,13 @@
         /* Reserved words */
         TK_IF,                   // if 
         TK_FOR,                  // for 
-        TK_PUB,                  // pub
-        TK_PRIV,                 // priv
-        TK_STATIC,               // static 
         TK_RETURN,               // ret
         TK_IMPORT,               // import               
         TK_FROM,                 // from   //criar
         TK_BREAK,                // break //criar
         TK_ELSE,                 // else  //criar   
+        TK_TRUE,                 // true //criar
+        TK_FALSE,                // false /criar
 
         /* Operators */
         TK_ATTRIBUTION,          // =
@@ -73,6 +72,7 @@
         TK_CLASSNAME,
         TK_COMMENT,             // #
         TK_INVALID,
+        TK_MAIN,                // main
         TK_EOF
     };
 
@@ -103,13 +103,15 @@
 "not"                                { return create_token(TK_NOT, "TK_NOT"); }
 "if"                        		 { return create_token(TK_IF, "TK_IF"); }
 "for"                       		 { return create_token(TK_FOR, "TK_FOR"); }
-"priv"                      		 { return create_token(TK_PRIV, "TK_PRIV"); }
-"pub"                       		 { return create_token(TK_PUB, "TK_PUB"); }
-"static"                    		 { return create_token(TK_STATIC, "TK_STATIC"); }
 "class"                     		 { return create_token(TK_CLASS, "TK_CLASS"); }
 "import"                    		 { return create_token(TK_IMPORT, "TK_IMPORT"); }
 "from"                      		 { return create_token(TK_FROM, "TK_FROM"); }
 "ret"                       		 { return create_token(TK_RETURN, "TK_RETURN"); }
+"main"                       		 { return create_token(TK_MAIN, "TK_MAIN"); }
+"true"                       		 { return create_token(TK_TRUE, "TK_TRUE"); }
+"false"                       		 { return create_token(TK_FALSE, "TK_FALSE"); }
+"else"                       		 { return create_token(TK_ELSE, "TK_ELSE"); }
+"break"                       		 { return create_token(TK_BREAK, "TK_BREAK"); }
 "->"                        		 { return create_token(TK_RETURNTYPE, "TK_RETURNTYPE"); }
 "("                         		 { return create_token(TK_OPEN_PARENTESIS, "TK_OPEN_PARENTESIS"); }
 ")"                         		 { return create_token(TK_CLOSE_PARENTESIS, "TK_CLOSE_PARENTESIS"); }
@@ -136,13 +138,13 @@
 ">"                         		 { return create_token(TK_GREATER_THAN, "TK_GREATER_THAN"); }
 ":"                         		 { return create_token(TK_COLON, "TK_COLON"); }
 "="                         		 { return create_token(TK_ATTRIBUTION, "TK_ATTRIBUTION"); }
-"#"                         		 { return create_token(TK_COMMENT, "TK_COMMENT"); }
+"#.*"                         		 { return create_token(TK_COMMENT, "TK_COMMENT"); }
 "."                         		 { return create_token(TK_DOT, "TK_DOT"); }
 ","                         		 { return create_token(TK_COMMA, "TK_COMMA"); }
 \"([^\\\"]|\\.)*\"          		 { return create_token(TK_STRING_LITERAL, "TK_STRING_LITERAL"); }
 [0-9]+\.[0-9]+              		 { return create_token(TK_FLOAT_NUMBER_LITERAL, "TK_FLOAT_NUMBER_LITERAL"); }
 [0-9]+                      		 { return create_token(TK_NUMBER_LITERAL, "TK_NUMBER_LITERAL"); }
-[A-Z_][a-zA-Z0-9_]*         		 { return create_token(TK_CLASSNAME, "TK_CLASSNAME"); }
+[A-Z][a-zA-Z0-9_]*         		     { return create_token(TK_CLASSNAME, "TK_CLASSNAME"); }
 [a-zA-Z_][a-zA-Z0-9_]*      		 { return create_token(TK_IDENTIFIER, "TK_IDENTIFIER"); }
 [ \t\n\r]+                  		 { /* ignora espaços em branco */ }
 .                           		 { return create_token(TK_INVALID, "TK_INVALID"); }
